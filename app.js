@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const bodyParser = require('body-parser');
 const logger = require("morgan");
 var cors = require('cors')
 
@@ -9,6 +8,7 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const torrentRouter = require("./routes/torrent");
 const crawlerRouter = require("./routes/crawler");
+const crawlerv2Router = require("./routes/crawlerv2");
 
 const app = express();
 
@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/api", torrentRouter);
+app.use('/api', crawlerv2Router);
 app.use('/api/anime', crawlerRouter);
 app.use("/users", usersRouter);
 
