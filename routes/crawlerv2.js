@@ -6,60 +6,29 @@ const cheerio = require("cheerio");
 const got = require("got");
 const url = "https://animekisa.in";
 const hasMainPage = true;
+const {SearchAnime, loadEpisodes, loadEpisode} = require("../providers/GogoAnimeProvider");
+
+
 router.post("/v2/search-anime", (req, res) => {
   // Join spaces with +
-  const search = req.body.search.split(" ").join("+");
+  const keyword = req.body.search.split(" ").join("+");
   (async () => {
-    const response = await got(`${url}/search/?keyword=${search}`);
-    const $ = cheerio.load(response.body);
-    const result = $(".flw-item").get();
-    const regex = new RegExp("-episode-.*\\b|-episode-full", "gm");
-    res.json(
-      result.map((item) => {
-        const $ = cheerio.load(item);
-        return {
-          title: $("a").text(),
-          link: String($("a").attr("href"))
-            .replace("watch/", "anime/")
-            .replace(regex, ""),
-          image: $("img").attr("data-src"),
-        };
-      })
-    );
+    const result = await SearchAnime(keyword);
+    res.send(result);
   })();
 });
 
 router.get("/v2/load-anime/:link", (req, res) => {
   (async () => {
-    const response = await got(`${url}/anime/${req.params.link}/`);
-    const $ = cheerio.load(response.body);
-    const result = $("div.tab-content ul li.nav-item").get();
-    res.json(
-      result.map((item, index) => {
-        const $ = cheerio.load(item);
-        return {
-          label: index + 1,
-          link: String($("a").attr("href")),
-        };
-      })
-    );
+    const result = await loadEpisodes(req.params.link);
+    res.send(result);
   })();
 });
 
 router.post("/v2/play-anime", (req, res) => {
   (async () => {
-    const response = await got(`${url}/watch/${req.body.link}/`);
-    const $ = cheerio.load(response.body);
-    const result = $(".link-item").get();
-    res.json(
-      result.map((item, index) => {
-        const $ = cheerio.load(item);
-        return {
-          label: index + 1,
-          link: String($("a").attr("data-embed")),
-        };
-      })
-    );
+    const result = await loadEpisode(req.body.link);
+    res.send(result);
   })();
 });
 

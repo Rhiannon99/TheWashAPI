@@ -1,25 +1,21 @@
 const cheerio = require("cheerio");
-const request = require("request");
+const got = require("got");
 const url = "https://animekisa.in";
-const hasMainPage = true;
 
-// SCRAPPED FOR NOW
+exports.SearchAnime = async (keyword) => {
+  const response = await got(`${url}/search/?keyword=${keyword}`);
+  const $ = cheerio.load(response.body);
+  const result = $(".flw-item").get();
+  const regex = new RegExp("-episode-.*\\b|-episode-full", "gm");
 
-const getAnime = async () => {
-    let responseHTML = null;
-    const html = await request(
-    `${url}/ajax/list/views?type=month`,
-    (error, response, html) => {
-      if (!error && response.statusCode == 200) {
-        const $ = cheerio.load(html);
-        responseHTML = $.html();
-      }
-    }
-  );
-  console.log(responseHTML);
-  return responseHTML;
-};
-
-module.exports = {
-  getAnime,
+  return result.map((item) => {
+    const $ = cheerio.load(item);
+    return {
+      title: $("a").text(),
+      link: String($("a").attr("href"))
+        .replace("watch/", "anime/")
+        .replace(regex, ""),
+      image: $("img").attr("data-src"),
+    };
+  });
 };
