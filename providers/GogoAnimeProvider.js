@@ -61,6 +61,7 @@ async function extractMedia(linkObject) {
   const encryptedJSON = decrypt(keys.secondKey, keys.iv, encryptedLink.data);
   const json = JSON.parse(encryptedJSON);
   const media = json.source.map((item) => {
+    // check if file is an m3u8 or mp4
     return {
       file: item.file,
       label: item.label,
