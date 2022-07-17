@@ -40,9 +40,9 @@ router.post("/v2/search-flick", (req, res) => {
   })();
 });
 
-router.post("/v2/load-flick", (req, res) => {
+router.get("/v2/load-flick/movie/:link", (req, res) => {
   (async () => {
-    const result = await loadFlicks(req.body.link);
+    const result = await loadFlicks(req.params.link);
     res.send(result);
   })();
 });

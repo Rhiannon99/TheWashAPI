@@ -94,6 +94,31 @@ async function getCaptchaToken(localURL, key, referrer = null) {
   // return response;
 }
 
+async function parseM3u8(hls) {
+  const index = await axios.get(hls).then((r) => {
+    // get the thirdLIne
+    const thirdLine = r.data.split("\n")[2];
+    return thirdLine;
+  });
+  const segments = await axios.get(index).then((r) => {
+    const segments = r.data.split("\n");
+    return segments;
+  });
+  const parsedHLS = segments
+    .map((segment) => {
+      // check if segment has .ts extension
+      if (segment.includes(".ts")) {
+        return `${String(index).replace("index.m3u8", "")}${segment}`;
+      }
+      // if not, it's a playlist
+      return segment;
+    })
+    .join("\n");
+
+  // Remove the string after the last slash
+  return parsedHLS;
+}
+
 async function extractRabbitStream(
   iframeLink,
   iframeKey,
@@ -119,7 +144,8 @@ async function extractRabbitStream(
     .then((r) => {
       return r.data;
     });
-  return sources;
+  const parsedHLS = await parseM3u8(sources.sources[0].file);
+  return parsedHLS;
 }
 
 exports.SearchFlick = async (keyword) => {
@@ -148,13 +174,9 @@ exports.SearchFlick = async (keyword) => {
 };
 
 exports.loadFlicks = async (link) => {
-  const isMovie = link.includes("/movie/");
   const id = String(link).split("-").pop();
 
-  const episodeURL = isMovie
-    ? `${url}/ajax/movie/episodes/${id}`
-    : `${url}/ajax/v2/tv/seasons/${id}`;
-
+  const episodeURL = `${url}/ajax/movie/episodes/${id}`;
   let response = await axios
     .get(`${episodeURL}`, {
       headers: { host: "sflix.to" },
@@ -176,11 +198,9 @@ exports.loadFlicks = async (link) => {
   if (episodes.length === 0) {
     return [];
   }
-  const movieLink = `${url}${String(link).replace(
-    "/movie/",
-    "/watch-movie/"
-  )}.${episodes[1].sourceID}`;
-
+  const movieLink = `${url}/watch-movie/${String(link)}.${
+    episodes[1].sourceID
+  }`;
   response = await axios
     .get(`${url}/ajax/get_link/${episodes[1].sourceID}`, {
       headers: { host: "sflix.to" },
