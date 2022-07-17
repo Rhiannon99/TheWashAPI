@@ -11,38 +11,34 @@ const pollingData = {
   pingTimeout: 0,
 };
 
-function generateTimeStamp(){
-  const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
+function generateTimeStamp() {
+  const chars =
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
   let code = "";
   let timestamp = Date.now();
 
-  while(timestamp > 0){
+  while (timestamp > 0) {
     code += chars[timestamp % chars.length];
     timestamp = Math.floor(timestamp / chars.length);
-
   }
   // Reverse the code
   return code.split("").reverse().join("");
 }
 
-async function getNewSID(baseURL){
-  for(let i = 0; i < 5; ++i){
-      await axios.get(`${baseURL}&t=${generateTimeStamp()}`).then((r) => {
-        const json = JSON.parse(String(r.data).slice(1));
-        pollingData.sid = json.sid;
-        pollingData.pingInterval = json.pingInterval;
-        pollingData.pingTimeout = json.pingTimeout;
-        pollingData.upgrades = json.upgrades;
-      });
+async function getNewSID(baseURL) {
+  for (let i = 0; i < 5; ++i) {
+    await axios.get(`${baseURL}&t=${generateTimeStamp()}`).then((r) => {
+      const json = JSON.parse(String(r.data).slice(1));
+      pollingData.sid = json.sid;
+      pollingData.pingInterval = json.pingInterval;
+      pollingData.pingTimeout = json.pingTimeout;
+      pollingData.upgrades = json.upgrades;
+    });
   }
 }
 
-async function InitPolling(baseURL, refferer){
-  
-}
-
 async function getCaptchaToken(localURL, key, referrer = null) {
-  const uri = `${url}:443`;
+  const uri = `${localURL}:443`;
   //   Convert uri to base64
   const base64 = Buffer.from(uri)
     .toString("base64")
@@ -51,7 +47,7 @@ async function getCaptchaToken(localURL, key, referrer = null) {
   const vToken = await axios
     .get(`https://www.google.com/recaptcha/api.js?render=${key}`, {
       headers: {
-        referrer: referrer,
+        // referrer: referrer,
         host: "www.google.com",
       },
     })
@@ -95,6 +91,7 @@ async function getCaptchaToken(localURL, key, referrer = null) {
   return String(response)
     .slice(String(response).indexOf('rresp","') + 8)
     .split('"')[0];
+  // return response;
 }
 
 async function extractRabbitStream(
@@ -107,13 +104,22 @@ async function extractRabbitStream(
   const mainURL = `https://rapid-cloud.ru/${String(iframeLink).split("/")[3]}`;
   const mainID = `${String(iframeLink).split("?")[0].split("/").pop()}`;
 
-  const response = await axios(iframeLink, {
-    headers: { referrer: mainURL },
-  }).then((r) => r);
-  const $ = cheerio.load(response.data);
-  const extractorData = "https://ws11.rabbitstream.net/socket.io/?EIO=4&transport=polling";
-  await getNewSID(extractorData);
-  return pollingData;
+  const captchaToken = await getCaptchaToken(url, iframeKey);
+  const sources = await axios
+    .get(
+      `https://rabbitstream.net/ajax/${
+        String(iframeLink).split("/")[3]
+      }/getSources?id=${mainID}&_token=${captchaToken}`,
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      }
+    )
+    .then((r) => {
+      return r.data;
+    });
+  return sources;
 }
 
 exports.SearchFlick = async (keyword) => {
