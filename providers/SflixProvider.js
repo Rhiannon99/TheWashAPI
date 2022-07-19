@@ -99,6 +99,7 @@ async function parseM3u8(hls) {
     // get the thirdLIne
     const thirdLine = r.data.split("\n")[2];
     return thirdLine;
+    // return r.data;
   });
   const segments = await axios.get(index).then((r) => {
     const segments = r.data.split("\n");
@@ -144,8 +145,7 @@ async function extractRabbitStream(
     .then((r) => {
       return r.data;
     });
-  const parsedHLS = await parseM3u8(sources.sources[0].file);
-  return parsedHLS;
+  return sources;
 }
 
 exports.SearchFlick = async (keyword) => {
@@ -163,14 +163,14 @@ exports.SearchFlick = async (keyword) => {
     return {
       // Remove white space at the end of string
       title: $("h2.film-name").text().replace("\n", "").trim(),
-      link: $("a").attr("href"),
+      link: String($("a").attr("href")).replace('/movie/', ''),
       isMovie: $("a").attr("href").includes("/movie/"),
       // Remove words that are not HD or SD
       quality:
         meta.eq(1).text().replace("\n", "").trim() === "HD" ? "HD" : "SD",
     };
   });
-  return result;
+  return result.filter(item => item.isMovie);
 };
 
 exports.loadFlicks = async (link) => {
@@ -207,16 +207,16 @@ exports.loadFlicks = async (link) => {
     })
     .then((r) => r);
 
-  const keyResponse = await axios
-    .get(`${movieLink}`, {
-      headers: { host: "sflix.to" },
-    })
-    .then((r) => r);
-  $ = cheerio.load(keyResponse.data);
-  // Get text inside quotes
-  const key = String($("script:not([src])")[0].children[0].data).match(
-    /\'(.*?)\'/
-  )[1];
-  const media = await extractRabbitStream(response.data.link, key, movieLink);
-  return media;
+  // const keyResponse = await axios
+  //   .get(`${movieLink}`, {
+  //     headers: { host: "sflix.to" },
+  //   })
+  //   .then((r) => r);
+  // $ = cheerio.load(keyResponse.data);
+  // // Get text inside quotes
+  // const key = String($("script:not([src])")[0].children[0].data).match(
+  //   /\'(.*?)\'/
+  // )[1];
+  // const media = await extractRabbitStream(response.data.link, key, movieLink);
+  return response.data;
 };
