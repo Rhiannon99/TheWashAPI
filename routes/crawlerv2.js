@@ -1,13 +1,7 @@
 const express = require("express");
-// const jsdom = require("jsdom");
-// const { JSDOM } = jsdom;
 const router = express.Router();
-const cheerio = require("cheerio");
-const got = require("got");
-const url = "https://animekisa.in";
-const hasMainPage = true;
 const {SearchAnime, loadEpisodes, loadEpisode} = require("../providers/GogoAnimeProvider");
-const {SearchFlick, loadFlicks} = require("../providers/SflixProvider");
+const {SearchFlick, loadFlicks} = require("../providers/TheFlixProvider");
 
 
 router.post("/v2/search-anime", (req, res) => {
