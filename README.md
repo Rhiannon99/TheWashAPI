@@ -46,6 +46,8 @@ I hope these endpoints will serve you, just don't abuse the request; and please 
 
 I trust you, cedric and denny will make this project a bit better for others.
 
+I hope the code found inside this repo will impress kaye.
+
 ### end of message
 
 # Fuck you Aldrin, I won't give out the links lol
