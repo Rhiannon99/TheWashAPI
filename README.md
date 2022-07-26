@@ -42,6 +42,7 @@ for the movies, same shit as above but with a few changes
     using the `replace` method or whatever string manipulation bullshit React Native uses
 
 Not my last addition, I still have TV and Cartoons to scrape but it will take a while for me to find the energy again
+
 I hope these endpoints will serve you, just don't abuse the request; and please use urllib for crying out loud, axios fucking sucks
 
 I trust you, cedric and denny will make this project a bit better for others.
