@@ -57,23 +57,99 @@ exports.SearchFlick = async (keyword) => {
   return result;
 };
 
-exports.loadFlicks = async (link) => {
-  // Decode thisconst id = `/movie/${link}`;
+exports.SearchSeries = async (keyword) => {
+  //    Remove all spaces
+  query = keyword.replace(/\s/g, "+");
+
+  const response = await axios
+    .get(`${url}/tv-shows/trending?search=${query}`)
+    .then((r) => r.data);
+  const $ = cheerio.load(response);
+  const json = JSON.parse($("script[type=application/json]").first().html());
+  const result = json.props.pageProps.mainList.docs
+    .map((item) => {
+      return {
+        id: item.id,
+        available: item.available,
+        title: item.name,
+        link: `/tv-show/${item.id}-${String(item.name)
+          .toLowerCase()
+          .replace(/\W/g, "-")
+          .replace(/-$/g, "")
+          .replace(/--+/g, "-")}`,
+      };
+    })
+    .filter((item) => item.available);
+  return result;
+};
+
+exports.loadSeriesEpisodes = async (link) => {
   const cookie = await getCookies();
-  const response = await axios.get(`${url}/movie/${link}`, {
+  const response = await axios
+    .get(`${url}/tv-show/${link}/season-1/episode-1`, {
       headers: {
-          "Cookie": cookie
+        Cookie: cookie,
+      },
+    })
+    .then((r) => r.data);
+  const $ = cheerio.load(response);
+  const json = JSON.parse($("script[type=application/json]").first().html());
+  const props = json.props.pageProps.selectedTv.seasons;
+  const links = props.map((season, index) => {
+    return {
+      id: index,
+      name: season.name,
+      episodes: season.episodes.map((episode) => {
+        return {
+          id: episode.id,
+          name: episode.name,
+          videos: episode.videos[0],
+        };
+      }),
+    };
+  });
+
+  return links;
+};
+
+exports.loadSeriesEpisode = async (id) => {
+  const cookie = await getCookies();
+  const media = await axios
+    .get(
+      `${url}:5679/tv/videos/${id}/request-access?contentUsageType=Viewing`,
+      {
+        headers: {
+          Cookie: cookie,
+        },
       }
-  }).then((r) => r.data);
+    )
+    .then((r) => r.data);
+  return media;
+};
+
+exports.loadFlicks = async (link) => {
+  const cookie = await getCookies();
+  const response = await axios
+    .get(`${url}/movie/${link}`, {
+      headers: {
+        Cookie: cookie,
+      },
+    })
+    .then((r) => r.data);
   const $ = cheerio.load(response);
   const json = JSON.parse($("script[type=application/json]").first().html());
   const serviceURL = json.runtimeConfig?.Services?.Server?.Url;
   const id = json.props?.pageProps?.movie?.videos[0];
-  const media = await axios.get(`${serviceURL}/movies/videos/${id}/request-access?contentUsageType=Viewing`,{
+  const media = await axios
+    .get(
+      `${serviceURL}/movies/videos/${id}/request-access?contentUsageType=Viewing`,
+      {
         headers: {
-            "Cookie": cookie
-        }
-  }).then((r) => r.data);
+          Cookie: cookie,
+        },
+      }
+    )
+    .then((r) => r.data);
 
   return media;
 };
