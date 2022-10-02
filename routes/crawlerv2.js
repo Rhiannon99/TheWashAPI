@@ -1,9 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const {SearchAnime, loadEpisodes, loadEpisode} = require("../providers/GogoAnimeProvider");
-const {SearchFlick, loadFlicks} = require("../providers/SolarMovieProvider");
-const {SearchSeries, loadSeriesEpisodes, loadSeriesEpisode} = require('../providers/TheFlixProvider');
-
+const { request } = require("urllib");
+const {
+  SearchAnime,
+  loadEpisodes,
+  loadEpisode,
+} = require("../providers/GogoAnimeProvider");
+const { SearchFlick, loadFlicks } = require("../providers/SolarMovieProvider");
+const {
+  SearchSeries,
+  loadSeriesEpisodes,
+  loadSeriesEpisode,
+} = require("../providers/TheFlixProvider");
 
 router.post("/v2/search-anime", (req, res) => {
   // Join spaces with +
@@ -58,9 +66,9 @@ router.get("/v2/load-series/tv-show/:link", (req, res) => {
 
 router.get("/v2/load-flick/movie/:link", (req, res) => {
   (async () => {
-    const result = await loadFlicks(req.params.link);
-    res.send(result);
+    res.send(req.params.link);
   })();
 });
+
 
 module.exports = router;

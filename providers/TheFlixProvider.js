@@ -124,7 +124,17 @@ exports.loadSeriesEpisode = async (id) => {
       }
     )
     .then((r) => r.data);
-  return media;
+  return {
+    id: media.id,
+    type: media.type,
+    url: `http://localhost:5555/proxy/${encodeURIComponent(media.url)}`,
+    viewingPolicy: {
+      allowSkipForTomorrow: media.viewingPolicy.allowSkipForTomorrow,
+      interruptAtPercent: media.viewingPolicy.interruptAtPercent,
+      isAwaitingPayment: media.viewingPolicy.isAwaitingPayment,
+      isAwaitingSignUp: media.viewingPolicy.isAwaitingSignUp,
+    }
+  };
 };
 
 exports.loadFlicks = async (link) => {
