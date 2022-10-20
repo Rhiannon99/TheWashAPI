@@ -51,4 +51,4 @@ I hope the code found inside this repo will impress kaye.
 
 ### end of message
 
-# Fuck you Aldrin, I won't give out the links lol
+# I love oten 2022
