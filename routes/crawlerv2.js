@@ -6,7 +6,7 @@ const {
   loadEpisodes,
   loadEpisode,
 } = require("../providers/GogoAnimeProvider");
-const { SearchFlick, loadFlicks } = require("../providers/SolarMovieProvider");
+const {SearchFlick, loadFlicks} = require("../providers/Ask4MovieProvider");
 const {
   SearchSeries,
   loadSeriesEpisodes,
@@ -66,7 +66,8 @@ router.get("/v2/load-series/tv-show/:link", (req, res) => {
 
 router.get("/v2/load-flick/movie/:link", (req, res) => {
   (async () => {
-    res.send(req.params.link);
+    const result = await loadFlicks(req.params.link);
+    res.send(result);
   })();
 });
 
