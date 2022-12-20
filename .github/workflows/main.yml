@@ -4,6 +4,7 @@ on: push
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: secrets
     steps:
       - uses: actions/checkout@v2 #Be sure you check-out the repo first. Deta CLI needs access to the files
       - uses: HarshKapadia2/deta-deploy@v1.0.2
