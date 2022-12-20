@@ -10,5 +10,5 @@ jobs:
         with:
           deta-access-token: ${{ secrets.DETA_TOKEN }} #Deta access token https://docs.deta.sh/docs/cli/auth
           deta-name: 'api' #Deta Micro name https://docs.deta.sh/docs/cli/commands/#deta-clone
-          deta-project: 'the_wash'
+          deta-project: 'thewash'
           deta-project-dir: 'thewash/api'
