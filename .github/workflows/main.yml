@@ -1,9 +1,5 @@
-name: Deta Deploy
-
-on:
-  push:
-    branches:
-      - master
+name: Deploy to Deta
+on: push
 
 jobs:
   deploy:
@@ -14,4 +10,4 @@ jobs:
         with:
           deta-access-token: ${{ secrets.DETA_TOKEN }} #Deta access token https://docs.deta.sh/docs/cli/auth
           deta-name: 'api' #Deta Micro name https://docs.deta.sh/docs/cli/commands/#deta-clone
-          deta-project: 'the_wash' #Optional: Deta project name https://docs.deta.sh/docs/cli/commands/#deta-clone
+          deta-project: 'thewash' #Optional: Deta project name https://docs.deta.sh/docs/cli/commands/#deta-clone
