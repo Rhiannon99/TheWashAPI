@@ -16,4 +16,4 @@ jobs:
           deta-access-token: ${{ secrets.DETA_TOKEN }} #Deta access token https://docs.deta.sh/docs/cli/auth
           deta-name: 'theapi' #Deta Micro name https://docs.deta.sh/docs/cli/commands/#deta-clone
           deta-project: 'the_wash_api' #Optional: Deta project name https://docs.deta.sh/docs/cli/commands/#deta-clone
-          deta-project-dir: 'theapi' #Optional: directory to be deployed on Deta. Default is the root "." 
+          deta-project-dir: '.' #Optional: directory to be deployed on Deta. Default is the root "." 
