@@ -127,7 +127,7 @@ exports.loadSeriesEpisode = async (id) => {
   return {
     id: media.id,
     type: media.type,
-    url: `http://localhost:5555/proxy/${encodeURIComponent(media.url)}`,
+    url: `https://sllvli.deta.dev/proxy/${encodeURIComponent(media.url)}`,
     viewingPolicy: {
       allowSkipForTomorrow: media.viewingPolicy.allowSkipForTomorrow,
       interruptAtPercent: media.viewingPolicy.interruptAtPercent,
