@@ -9,4 +9,6 @@ jobs:
       - uses: HarshKapadia2/deta-deploy@v1.0.2
         with:
           deta-access-token: ${{ secrets.DETA_TOKEN }} #Deta access token https://docs.deta.sh/docs/cli/auth
-          deta-name: 'washapi' #Deta Micro name https://docs.deta.sh/docs/cli/commands/#deta-clone
+          deta-name: 'api' #Deta Micro name https://docs.deta.sh/docs/cli/commands/#deta-clone
+          deta-project: 'the_wash'
+          deta-project-dir: 'thewash/api'
