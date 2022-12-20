@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2 #Be sure you check-out the repo first. Deta CLI needs access to the files
       - uses: BogDAAAMN/deta-deploy-action@v1.0.1
         with:
-          deta-access-token: ${{ secrets.DETA_TOKEN }} #Deta access token https://docs.deta.sh/docs/cli/auth
-          deta-name: ${{ secrets.DETA_NAME }} #Deta Micro name https://docs.deta.sh/docs/cli/commands/#deta-clone
-          deta-project: ${{ secrets.DETA_NAME }} #Optional: Deta project name https://docs.deta.sh/docs/cli/commands/#deta-clone
-          deta-project-dir: ${{ secrets.DETA_NAME }} #Optional: directory to be deployed on Deta. Default is the root "." 
+          deta-access-token: ${{ DETA_TOKEN }} #Deta access token https://docs.deta.sh/docs/cli/auth
+          deta-name: ${{ DETA_NAME }} #Deta Micro name https://docs.deta.sh/docs/cli/commands/#deta-clone
+          deta-project: ${{ DETA_NAME }} #Optional: Deta project name https://docs.deta.sh/docs/cli/commands/#deta-clone
+          deta-project-dir: ${{ DETA_NAME }} #Optional: directory to be deployed on Deta. Default is the root "." 
