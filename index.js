@@ -7,7 +7,6 @@ var cors = require('cors')
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
-const torrentRouter = require("./routes/torrent");
 const crawlerRouter = require("./routes/crawler");
 const crawlerv2Router = require("./routes/crawlerv2");
 
