@@ -25,7 +25,6 @@ const rewrite = (path) => {
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
-app.use("/api", torrentRouter);
 app.use('/api', crawlerv2Router);
 app.use('/api/anime', crawlerRouter);
 app.use("/users", usersRouter);
