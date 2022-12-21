@@ -28,7 +28,6 @@
     "node-forge": "^1.3.1",
     "nodemon": "^2.0.16",
     "request": "^2.88.2",
-    "urllib": "^3.0.4",
-    "webtorrent": "^1.8.16"
+    "urllib": "^3.0.4"
   }
 }
