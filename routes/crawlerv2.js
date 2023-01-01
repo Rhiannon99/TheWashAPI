@@ -6,7 +6,8 @@ const {
   loadEpisodes,
   loadEpisode,
 } = require("../providers/GogoAnimeProvider");
-const {SearchFlick, loadFlicks} = require("../providers/Ask4MovieProvider");
+// const {SearchFlick, loadFlicks} = require("../providers/Ask4MovieProvider");
+const {SearchFlick, loadFlicks} = require("../providers/FlixHQProvider");
 const {
   SearchSeries,
   loadSeriesEpisodes,
@@ -64,9 +65,9 @@ router.get("/v2/load-series/tv-show/:link", (req, res) => {
   })();
 });
 
-router.get("/v2/load-flick/movie/:link", (req, res) => {
+router.post("/v2/load-flick/movie", (req, res) => {
   (async () => {
-    const result = await loadFlicks(req.params.link);
+    const result = await loadFlicks(req.body.link);
     res.send(result);
   })();
 });

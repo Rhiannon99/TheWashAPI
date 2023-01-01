@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
-const url = "https://solarmovie.pe";
+const url = "https://sflix.to/";
 const crypto = require("crypto");
 const name = "SolarMovie";
 
@@ -85,7 +85,7 @@ exports.SearchFlick = async (keyword) => {
   const search = String(keyword).toLowerCase().replace(/\s/g, "-");
   const response = await axios
     .get(`${url}/search/${search}`, {
-      headers: { host: "solarmovie.pe" },
+      headers: { host: "sflix.to" },
     })
     .then((r) => r);
   const $ = cheerio.load(response.data);
