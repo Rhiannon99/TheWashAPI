@@ -15,7 +15,7 @@ const getServer = async (mediaID, episodeID, baseURL) => {
 
   const response = await axios.get(episodeID).then((r) => r);
   const $ = cheerio.load(response.data);
-
+  
   const servers = $(".nav > li")
     .map((i, el) => {
       const server = {
@@ -34,6 +34,7 @@ const getServer = async (mediaID, episodeID, baseURL) => {
       return server;
     })
     .get();
+  
   return servers[0].url.split(".").pop();
 };
 

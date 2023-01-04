@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
-const url = "https://gogoanime.lu";
+const url = "https://www.gogoanime.dk";
 const crypto = require("crypto");
 const name = "Gogo";
 
