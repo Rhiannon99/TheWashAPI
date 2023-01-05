@@ -58,26 +58,35 @@ exports.extractGogoCDN = async (videoURL, isAlternative = false, baseURL) => {
     throw new Error("No source found. Try a different server.");
 
   if (decryptedData.source[0].file.includes(".m3u8")) {
-    const resResult = await axios.get(decryptedData.source[0].file.toString());
-    const resolutions = resResult.data.match(/(RESOLUTION=)(.*)(\s*?)(\s*.*)/g);
-    resolutions.forEach((res) => {
-      const index = decryptedData.source[0].file.lastIndexOf("/");
-      const quality = res.split("\n")[0].split("x")[1].split(",")[0];
-      const url = decryptedData.source[0].file.slice(0, index);
-      sources.push({
-        url: url + "/" + res.split("\n")[1],
-        isM3U8: (url + res.split("\n")[1]).includes(".m3u8"),
-        quality: quality + "p",
-      });
+    // const resResult = await axios.get(decryptedData.source[0].file.toString());
+    // const resolutions = resResult.data.match(/(RESOLUTION=)(.*)(\s*?)(\s*.*)/g);
+
+    // return ;
+
+    // resolutions.forEach((res) => {
+    //   const index = decryptedData.source[0].file.lastIndexOf("/");
+    //   const quality = res.split("\n")[0].split("x")[1].split(",")[0];
+    //   const url = decryptedData.source[0].file.slice(0, index);
+    //   sources.push({
+    //     url: url + "/" + res.split("\n")[1],
+    //     isM3U8: (url + res.split("\n")[1]).includes(".m3u8"),
+    //     quality: quality + "p",
+    //   });
+    // });
+
+    sources.push({
+      url: decryptedData.source[0].file,
+      isM3U8: true,
+      quality: "default"
     });
 
-    decryptedData.source.forEach((source) => {
-      sources.push({
-        url: source.file,
-        isM3U8: source.file.includes(".m3u8"),
-        quality: "default",
-      });
-    });
+    // decryptedData.source.forEach((source) => {
+    //   sources.push({
+    //     url: source.file,
+    //     isM3U8: source.file.includes(".m3u8"),
+    //     quality: "default",
+    //   });
+    // });
   } else {
     decryptedData.source.forEach((source) => {
       sources.push({
